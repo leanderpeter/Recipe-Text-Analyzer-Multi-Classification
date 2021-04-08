@@ -56,8 +56,13 @@ for element in cuisines:
 		try:
 			name = el.get_attribute('aria-label')
 			link = el.get_attribute('href')
-			recipe = {'cuisine': cuisine_tmp, 'name':name , 'link': link}
-			dataset.append(recipe)
+			if cuisine_tmp == 'Mediterranean':
+				cuisine_tmp = 'Iberic'
+				recipe = {'cuisine': cuisine_tmp, 'name':name , 'link': link}
+				dataset.append(recipe)
+			else:
+				recipe = {'cuisine': cuisine_tmp, 'name':name , 'link': link}
+				dataset.append(recipe)
 		except:
 			print('Element has no aria-label')
 
