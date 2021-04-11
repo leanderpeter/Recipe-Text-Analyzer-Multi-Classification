@@ -7,7 +7,7 @@ import random
 
 #links to cuisine category
 cuisines = ["https://www.yummly.com/recipes?q=Best%20Chinese","https://www.yummly.com/recipes?q=Easy%20Chinese","https://www.yummly.com/recipes?q=Healthy%20Chinese",
-"https://www.yummly.com/recipes?q=Best%20Mediterranean","https://www.yummly.com/recipes?q=Easy%20Mediterranean","https://www.yummly.com/recipes?q=Healthy%20Mediterranean"]
+"https://www.yummly.com/recipes?q=Best%20Portuguese","https://www.yummly.com/recipes?q=Best%20Spanish"]
 
 # numer of recipes wanted to search
 # default = 50
@@ -55,8 +55,10 @@ for element in cuisines:
 		# try to get labels (eg names of recipe)
 		try:
 			name = el.get_attribute('aria-label')
+			name = name.rstrip()
+			name = name.replace(" ", "_")
 			link = el.get_attribute('href')
-			if cuisine_tmp == 'Mediterranean':
+			if cuisine_tmp == 'Portuguese' or cuisine_tmp == 'Spanish':
 				cuisine_tmp = 'Iberic'
 				recipe = {'cuisine': cuisine_tmp, 'name':name , 'link': link}
 				dataset.append(recipe)
