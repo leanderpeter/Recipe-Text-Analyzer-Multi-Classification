@@ -55,9 +55,10 @@ for element in cuisines:
 		# try to get labels (eg names of recipe)
 		try:
 			name = el.get_attribute('aria-label')
-			name = name.rstrip()
 			name = name.replace(" ", "_")
+			name = name.rstrip()
 			link = el.get_attribute('href')
+			link = link.rstrip()
 			if cuisine_tmp == 'Portuguese' or cuisine_tmp == 'Spanish':
 				cuisine_tmp = 'Iberic'
 				recipe = {'cuisine': cuisine_tmp, 'name':name , 'link': link}
@@ -94,7 +95,7 @@ csv_test_file = "test_dataset.csv"
 try:
 	''' Write Training Dataset to csv
 	'''
-	with open(csv_file, 'w') as csvfile:
+	with open(csv_file, 'w', newline='', encoding='utf-8') as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
 		writer.writeheader()
 		for data in dataset:
@@ -103,7 +104,7 @@ try:
 
 	''' Write Test Dataset to csv
 	'''
-	with open(csv_test_file, 'w') as csvfile:
+	with open(csv_test_file, 'w', newline='', encoding='utf-8') as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
 		writer.writeheader()
 		for data in d_shuffled:
