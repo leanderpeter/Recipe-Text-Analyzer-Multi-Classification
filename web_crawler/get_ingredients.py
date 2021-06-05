@@ -4,10 +4,17 @@ import time
 import pandas as pd
 import csv
 from tqdm import tqdm
+import argparse
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--recipes', help='Path to Trainings Daten in CSV format',
+                    default='TrainingsDaten.csv', type=str)
+args = parser.parse_args()
 
 recipe_raw = []
 
-with open('TestDaten.csv', newline='') as csvfile:
+with open(args.recipes, newline='') as csvfile:
 	spamreader = csv.reader(csvfile, delimiter=';', quotechar='|')
 	for row in spamreader:
 		# print(', '.join(row))
@@ -21,6 +28,8 @@ driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver')
 # init empty dataframe
 df = pd.DataFrame(columns=['index', 'name', 'ingredients','cuisine'])
 
+# list of dead recipes
+dead_recipes = []
 
 for recipe in tqdm(range(1, len(recipe_raw))):
 
@@ -39,6 +48,8 @@ for recipe in tqdm(range(1, len(recipe_raw))):
 
 	# get all ingredient 'tabs'
 	row = driver.find_elements_by_class_name("IngredientLine")
+	if row == None:
+		dead_recipes.append(recipe_raw[recipe][2])
 
 	# init empty list for all ingredients in recipe
 	ingredients = []
@@ -84,9 +95,21 @@ for recipe in tqdm(range(1, len(recipe_raw))):
 
 
 
-print(df)
+
+
+print(dead_recipes)
 
 df.to_csv('test_data_w_ingredients.csv', sep=';', encoding='utf-8')
 
 # close browser after use
 driver.close()
+
+try:
+	with open(csv_file, 'w', newline='', encoding='utf-8') as csvfile:
+		writer = csv.DictWriter('dead_links.csv', fieldnames=['dead_links'])
+		writer.writeheader()
+		for data in dead_recipes:
+			writer.writerow(data)
+
+except:
+	print("No dead links found!")
